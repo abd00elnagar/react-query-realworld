@@ -10,9 +10,9 @@ export interface postRegisterParam {
 }
 
 export interface putUserParam {
-  email: string;
-  username: string;
-  bio: string;
-  image: string;
-  password: string;
+  email?: string;
+  username?: string;
+  bio?: string;
+  image?: string;
+  password?: string;
 }

@@ -2,7 +2,7 @@ import { ACCESS_TOKEN_KEY } from '@/constants/token.contant';
 import token from '@/lib/token';
 import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
 
-const host = 'http://laravel-realworld-example-app.test/api';
+const host = process.env.REACT_APP_API_URL || 'http://laravel-realworld-example-app.test/api';
 
 const apiClient = axios.create({
   baseURL: host,
@@ -19,7 +19,7 @@ apiClient.interceptors.request.use((request) => {
   const { method, url } = request;
 
   if (jwtToken) {
-    request.headers['Authorization'] = `Token ${jwtToken}`;
+    request.headers['Authorization'] = `Bearer ${jwtToken}`;
   }
 
   logOnDev(`🚀 [${method?.toUpperCase()}] ${url} | Request`, request);
@@ -37,12 +37,14 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    const { message } = error;
-    const { status, data } = error.response;
-    const { method, url } = error.config;
+    const { message } = error as AxiosError;
+    const status = (error as AxiosError)?.response?.status;
+    const data = (error as AxiosError)?.response?.data as any;
+    const method = (error as AxiosError)?.config?.method;
+    const url = (error as AxiosError)?.config?.url;
 
     if (status === 429) {
-      token.removeToken('ACCESS_TOKEN_KEY');
+      token.removeToken(ACCESS_TOKEN_KEY);
       window.location.reload();
     }
 

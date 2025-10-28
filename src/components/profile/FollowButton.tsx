@@ -4,6 +4,7 @@ import routerMeta from '@/lib/routerMeta';
 import { useFollowUserMutation, useUnFollowUserMutation } from '@/queries/profiles.query';
 import { useGetUserQuery } from '@/queries/user.query';
 import { Link } from 'react-router-dom';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 interface IFollowButton {
   profileName: string;
   isFollow: boolean;
@@ -42,6 +43,8 @@ const FollowButton = ({ profileName, isFollow }: IFollowButton) => {
 
   return (
     <>
+      {followUserMutation.isError ? <ServerErrorAlert error={followUserMutation.error} /> : null}
+      {unfollowUserMutation.isError ? <ServerErrorAlert error={unfollowUserMutation.error} /> : null}
       {data.username === profileName ? (
         <Link to={routerMeta.SettingPage.path} className="btn btn-sm btn-outline-secondary action-btn">
           <i className="ion-gear-a"></i>&nbsp; Edit Profile Settings

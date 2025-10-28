@@ -6,6 +6,7 @@ import { postLogin } from '@/repositories/users/usersRepository';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { UserContext } from '@/contexts/UserContextProvider';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 const SignInPage = () => {
   const [error, setError] = useState({
@@ -13,6 +14,7 @@ const SignInPage = () => {
     password: '',
     emailOrPassword: '',
   });
+  const [lastError, setLastError] = useState<unknown>(null);
 
   const [signIndata, onChangeSignInData] = useInputs({ email: '', password: '' });
   const { setIsLogin } = useContext(UserContext);
@@ -33,6 +35,7 @@ const SignInPage = () => {
           password: err.response.data.errors.password,
           emailOrPassword: err.response.data.errors['email or password'],
         });
+        setLastError(err);
       });
   };
 
@@ -45,6 +48,8 @@ const SignInPage = () => {
             <p className="text-xs-center">
               <Link to={routerMeta.SignUpPage.path}>Not registered?</Link>
             </p>
+
+            {lastError ? <ServerErrorAlert error={lastError} /> : null}
 
             <ul className="error-messages">
               {error.email && <li>email {error.email}</li>}

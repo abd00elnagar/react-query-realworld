@@ -3,6 +3,7 @@ import queryClient from '@/queries/queryClient';
 import { useDeleteArticleMutation } from '@/queries/articles.query';
 import { useNavigate } from 'react-router-dom';
 import { IArticle } from '@/interfaces/main';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 interface IButtonsWIthAccessProps {
   articleInfo: IArticle;
@@ -26,6 +27,7 @@ const ButtonsWIthAccess = ({ articleInfo }: IButtonsWIthAccessProps) => {
 
   return (
     <>
+      {deleteArticleMutation.isError ? <ServerErrorAlert error={deleteArticleMutation.error} /> : null}
       <button
         className="btn btn-sm btn-outline-secondary"
         type="button"

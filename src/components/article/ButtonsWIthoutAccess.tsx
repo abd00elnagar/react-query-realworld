@@ -3,6 +3,7 @@ import { useFollowUserMutation, useUnFollowUserMutation } from '@/queries/profil
 import queryClient from '@/queries/queryClient';
 import { QUERY_ARTICLE_KEY } from '@/constants/query.constant';
 import { IArticle } from '@/interfaces/main';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 interface IButtonsWIthoutAccessProps {
   articleInfo: IArticle;
@@ -71,6 +72,10 @@ const ButtonsWIthoutAccess = ({ articleInfo }: IButtonsWIthoutAccessProps) => {
 
   return (
     <>
+      {favoriteArticleMutation.isError ? <ServerErrorAlert error={favoriteArticleMutation.error} /> : null}
+      {unfavoriteArticleMutation.isError ? <ServerErrorAlert error={unfavoriteArticleMutation.error} /> : null}
+      {followUserMutation.isError ? <ServerErrorAlert error={followUserMutation.error} /> : null}
+      {unfollowUserMutation.isError ? <ServerErrorAlert error={unfollowUserMutation.error} /> : null}
       <button
         type="button"
         className={`btn btn-sm btn-outline-${articleInfo.author.following ? 'primary' : 'secondary'}`}

@@ -5,6 +5,7 @@ import queryClient from '@/queries/queryClient';
 import { QUERY_COMMENTS_KEY } from '@/constants/query.constant';
 import convertToDate from '@/lib/utils/convertToDate';
 import { IComment } from '@/interfaces/main';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 interface ICommentProps {
   comments: IComment[];
@@ -44,6 +45,7 @@ const Comment = ({ comments, slug }: ICommentProps) => {
 
   return (
     <>
+      {createCommentMutation.isError ? <ServerErrorAlert error={createCommentMutation.error} /> : null}
       <form className="card comment-form" onSubmit={onPostComment}>
         <div className="card-block">
           <textarea
@@ -62,6 +64,8 @@ const Comment = ({ comments, slug }: ICommentProps) => {
           </button>
         </div>
       </form>
+
+      {deleteCommentMutation.isError ? <ServerErrorAlert error={deleteCommentMutation.error} /> : null}
 
       {comments.map((comment, index) => (
         <div className="card" key={index}>

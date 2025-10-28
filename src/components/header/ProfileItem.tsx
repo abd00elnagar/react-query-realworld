@@ -4,10 +4,14 @@ import { useGetUserQuery } from '@/queries/user.query';
 const ProfileItem = () => {
   const { data } = useGetUserQuery();
 
+  if (!data) {
+    return null;
+  }
+
   return (
     <li className="nav-item">
       <NavLink
-        to={`profile/${data.username}`}
+        to={`/profile/${data.username}`}
         className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
         state={data.username}
       >

@@ -7,6 +7,7 @@ import queryClient from '@/queries/queryClient';
 import { QUERY_ARTICLES_KEY } from '@/constants/query.constant';
 import convertToDate from '@/lib/utils/convertToDate';
 import { IArticle } from '@/interfaces/main';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 interface IFeedProps {
   article: IArticle;
@@ -52,6 +53,8 @@ const Feed = ({ article }: IFeedProps) => {
 
   return (
     <div role="presentation" className="article-preview">
+      {favoriteArticleMutation.isError ? <ServerErrorAlert error={favoriteArticleMutation.error} /> : null}
+      {unfavoriteArticleMutation.isError ? <ServerErrorAlert error={unfavoriteArticleMutation.error} /> : null}
       <div className="article-meta">
         <a href="profile.html">
           <img src={article.author.image} alt="profile" />

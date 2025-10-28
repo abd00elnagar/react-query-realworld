@@ -34,8 +34,8 @@ const Router = () => {
                 <Suspense fallback={<LoadingFallback />}>
                   <ErrorBoundary
                     onReset={reset}
-                    fallbackRender={({ resetErrorBoundary }) => (
-                      <ErrorFallback resetErrorBoundary={resetErrorBoundary} />
+                    fallbackRender={({ error, resetErrorBoundary }) => (
+                      <ErrorFallback error={error} resetErrorBoundary={resetErrorBoundary} />
                     )}
                   >
                     <Component />

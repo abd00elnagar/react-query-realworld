@@ -3,6 +3,7 @@ import queryClient from '@/queries/queryClient';
 import { useUpdateArticleMutation } from '@/queries/articles.query';
 import { QUERY_ARTICLE_KEY } from '@/constants/query.constant';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 const EditArticlePage = () => {
   const { state } = useLocation();
@@ -60,6 +61,7 @@ const EditArticlePage = () => {
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
+            {updateArticleMutation.isError ? <ServerErrorAlert error={updateArticleMutation.error} /> : null}
             <form onSubmit={onUpdate}>
               <fieldset>
                 <fieldset className="form-group">

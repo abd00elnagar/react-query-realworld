@@ -3,6 +3,7 @@ import queryClient from '@/queries/queryClient';
 import { useCreateArticleMutation } from '@/queries/articles.query';
 import { QUERY_ARTICLES_KEY } from '@/constants/query.constant';
 import { useNavigate } from 'react-router-dom';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 const NewArticlePage = () => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ const NewArticlePage = () => {
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
+            {createArticleMutation.isError ? <ServerErrorAlert error={createArticleMutation.error} /> : null}
             <form onSubmit={onPublish}>
               <fieldset>
                 <fieldset className="form-group">

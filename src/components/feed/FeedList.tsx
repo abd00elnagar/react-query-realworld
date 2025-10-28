@@ -20,8 +20,8 @@ const FeedList = ({ articlesInfo, page, setPage }: IFeedListProps) => {
     <>
       {articles.length !== 0 ? (
         <>
-          {articles.map((article) => (
-            <Feed key={article.slug} article={article} />
+          {articles.map((article, index) => (
+            <Feed key={index} article={article} />
           ))}
         </>
       ) : (

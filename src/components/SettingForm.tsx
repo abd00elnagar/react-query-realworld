@@ -3,6 +3,7 @@ import useInputs from '@/lib/hooks/useInputs';
 import queryClient from '@/queries/queryClient';
 import { usePutUserMutation } from '@/queries/user.query';
 import { useNavigate } from 'react-router-dom';
+import ServerErrorAlert from '@/components/common/ServerErrorAlert';
 
 interface ISettingFormProps {
   data: { [key: string]: string | number };
@@ -23,8 +24,33 @@ const SettingForm = ({ data }: ISettingFormProps) => {
   const onUpdateSetting = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const filteredUser: Record<string, string> = {};
+
+    // Only send email/username if changed to avoid unique validation on same values
+    if (userData.email && userData.email !== String(data.email)) {
+      filteredUser.email = userData.email as string;
+    }
+    if (userData.username && userData.username !== String(data.username)) {
+      filteredUser.username = userData.username as string;
+    }
+
+    // Send bio even if empty to allow clearing it (passes string rule)
+    if (userData.bio !== undefined && userData.bio !== null) {
+      filteredUser.bio = String(userData.bio);
+    }
+
+    // Only send image if non-empty to satisfy url rule
+    if (userData.image) {
+      filteredUser.image = userData.image as string;
+    }
+
+    // Only send password if provided
+    if (userData.password) {
+      filteredUser.password = userData.password as string;
+    }
+
     putUserMutation.mutate(
-      { user: userData },
+      { user: filteredUser },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [QUERY_USER_KEY] });
@@ -36,6 +62,7 @@ const SettingForm = ({ data }: ISettingFormProps) => {
 
   return (
     <>
+      {putUserMutation.isError && <ServerErrorAlert error={putUserMutation.error} />}
       <form onSubmit={onUpdateSetting}>
         <fieldset>
           <fieldset className="form-group">
