@@ -2,7 +2,7 @@ import { ACCESS_TOKEN_KEY } from '@/constants/token.contant';
 import token from '@/lib/token';
 import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
 
-const host = 'https://api.realworld.io/api';
+const host = 'http://laravel-realworld-example-app.test/api';
 
 const apiClient = axios.create({
   baseURL: host,
