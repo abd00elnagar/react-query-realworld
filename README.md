@@ -1,12 +1,174 @@
-# ![logo-002](https://user-images.githubusercontent.com/90181028/217143286-a023dd4b-f3a7-4218-8802-39a3bd2b15a8.png)
+# React Query RealWorld Example App
 
 [![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
 
-> ### React + React Query codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
+A React implementation of the RealWorld frontend with article revision functionality, using React Query for state management.
 
-### [Demo](https://react-query-realworld.netlify.app)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+## Requirements
+- Node.js >= 16
+- npm or yarn
+- Backend API running (see laravel-realworld-example-app)
 
-This codebase was created to demonstrate a fully fledged fullstack application built with **React + React Query** including CRUD operations, authentication, routing, pagination, and more.
+## Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/abd00elnagar/react-query-realworld.git
+cd react-query-realworld
+```
+
+2. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Configure environment
+Create a `.env` file in the root directory:
+```env
+REACT_APP_API_URL=http://localhost:8000/api
+```
+
+⚠️ **IMPORTANT API Configuration Note** ⚠️
+- The API base URL is configured in `src/repositories/apiClient.ts`
+- Default configuration uses the environment variable `REACT_APP_API_URL`
+- If you need to change the API endpoint:
+  ```typescript
+  // src/repositories/apiClient.ts
+  const baseURL = 'http://localhost:8000/api';
+  
+  export const apiClient = axios.create({
+    baseURL,
+    // ... other configuration
+  });
+  ```
+- Make sure to:
+  1. Assign the correct URL to the baseURL variable
+  3. Verify the API is accessible at the specified URL
+  4. Start the development server
+```bash
+npm start
+# or
+yarn start
+```
+
+The app will be available at `http://localhost:3000`
+
+## Article Revision Features
+
+### View Revision History
+Navigate to an article and click "View Revisions" to see the complete history of changes.
+
+### Revision Details
+Each revision shows:
+- Title and content at that point in time
+- Creation timestamp
+- Author information
+- Changes from previous version
+
+### Revert to Previous Version
+Users can revert an article to any previous version if they have the necessary permissions.
+
+## Security Implementation
+
+1. Authentication
+   - JWT-based authentication
+   - Token stored securely in localStorage
+   - Automatic token refresh handling
+   - Secure header transmission
+
+2. Authorization
+   - Protected routes require authentication
+   - Role-based access control for article management
+   - Revision access limited to authenticated users
+   - Revert functionality restricted to article owners
+
+3. Error Handling
+   - Comprehensive error messages for users
+   - Network error recovery
+   - Session expiration handling
+   - Form validation feedback
+
+## API Integration
+
+### Revision Endpoints
+All requests include `Authorization: Bearer <token>` header.
+
+1. List Revisions
+```typescript
+GET /api/articles/{slug}/revisions
+// Returns: { revisions: Revision[], count: number }
+```
+
+2. View Revision
+```typescript
+GET /api/articles/{slug}/revisions/{id}
+// Returns: { revision: Revision }
+```
+
+3. Revert to Revision
+```typescript
+POST /api/articles/{slug}/revisions/{id}/revert
+// Returns: { message: string, article: Article }
+```
+
+### Type Definitions
+```typescript
+interface Revision {
+    id: number;
+    article_id: number;
+    title: string;
+    slug: string;
+    description: string;
+    body: string;
+    created_at: string;
+    updated_at: string;
+}
+```
+
+## Development Notes
+
+1. State Management
+   - React Query for server state
+   - Context for auth state
+   - Local state for UI components
+
+2. Testing
+```bash
+npm test
+# or
+yarn test
+```
+
+3. Building for Production
+```bash
+npm run build
+# or
+yarn build
+```
+
+4. Code Style
+   - ESLint configuration
+   - Prettier for formatting
+   - TypeScript strict mode enabled
+
+## Additional Features
+
+1. Loading States
+   - Skeleton loaders for content
+   - Progress indicators for actions
+   - Optimistic updates for better UX
+
+2. Error Handling
+   - User-friendly error messages
+   - Network error recovery
+   - Form validation feedback
+
+3. Responsive Design
+   - Mobile-first approach
+   - Adaptive layouts
+   - Touch-friendly interfaces
 
 We've gone to great lengths to adhere to the [TanStack Query](https://tanstack.com/query/latest/docs/react/overview) community styleguides & best practices.
 
