@@ -42,9 +42,20 @@ const routerMeta: RouterMetaType = {
     path: '/article/:slug',
     isShow: false,
   },
+  ArticleRevisionsPage: {
+    name: 'Article Revisions',
+    path: '/article/:slug/revisions',
+    isShow: false,
+    isAuth: true,
+  },
   ProfilePage: {
     name: 'Profile',
     path: '/profile/:username/*',
+    isShow: false,
+  },
+  RevisionDetailPage: {
+    name: 'Revision',
+    path: '/article/:slug/revisions/:revisionId',
     isShow: false,
   },
   SignInPage: {

@@ -1,5 +1,5 @@
 import { useGetArticleQueries } from '@/queries/articles.query';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ButtonSelector from '@/components/article/ButtonSelector';
@@ -11,6 +11,7 @@ import convertToDate from '@/lib/utils/convertToDate';
 
 const ArticlePage = () => {
   const { state } = useLocation();
+  const { slug } = useParams<{ slug: string }>();
   const [articleInfo, commentsInfo] = useGetArticleQueries(state);
   const { isLogin } = useContext(UserContext);
 
@@ -35,7 +36,11 @@ const ArticlePage = () => {
               </Link>
               <span className="date">{convertToDate(articleInfo.data.updatedAt)}</span>
             </div>
-            {isLogin ? <ButtonSelector articleInfo={articleInfo.data} /> : <></>}
+            {isLogin && (
+              <div className="flex items-center space-x-2">
+                <ButtonSelector articleInfo={articleInfo.data} />
+              </div>
+            )}
           </div>
         </div>
       </div>
