@@ -98,12 +98,8 @@ function RevisionList({ articleSlug, articleTitle }: RevisionListProps) {
 
       if (response.data.article) {
         const newSlug = response.data.article.slug;
-        // If the slug hasn't changed, just refresh the page
-        if (newSlug === articleSlug) {
-          window.location.reload();
-          return;
-        }
-        window.location.href = '/';
+        // Navigate to the article page
+        navigate(`/article/${newSlug}`, { replace: true });
       }
     } catch (err) {
       console.error('Failed to revert revision:', err);
@@ -115,7 +111,7 @@ function RevisionList({ articleSlug, articleTitle }: RevisionListProps) {
   return (
     <div className="revision-list-container">
       <div className="revision-header">
-        <button onClick={() => navigate(-1)} className="back-button">
+        <button onClick={() => navigate(`/article/${articleSlug}`)} className="back-button">
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
           Back to Article
         </button>

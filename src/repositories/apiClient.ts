@@ -43,9 +43,16 @@ apiClient.interceptors.response.use(
     const method = (error as AxiosError)?.config?.method;
     const url = (error as AxiosError)?.config?.url;
 
-    if (status === 429) {
+    // Handle authentication errors
+    if (status === 401 || status === 403 || status === 429) {
+      // Remove token and trigger auth state update
       token.removeToken(ACCESS_TOKEN_KEY);
-      window.location.reload();
+
+      // Only reload if we're not already on an auth page
+      const isAuthPage = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
+      if (!isAuthPage) {
+        window.location.href = '/login';
+      }
     }
 
     logOnDev(`🚨 [${method?.toUpperCase()}] ${url} | Error ${status} ${data?.message || ''} | ${message}`, error);

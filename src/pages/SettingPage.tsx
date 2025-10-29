@@ -8,10 +8,9 @@ import { UserContext } from '@/contexts/UserContextProvider';
 
 const SettingPage = () => {
   const navigate = useNavigate();
-  const { setIsLogin } = useContext(UserContext);
+  const { logout } = useContext(UserContext);
   const onLogout = () => {
-    token.removeToken(ACCESS_TOKEN_KEY);
-    setIsLogin(false);
+    logout();
     navigate('/');
   };
 

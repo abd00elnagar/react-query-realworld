@@ -1,5 +1,5 @@
 import { useGetArticleQueries } from '@/queries/articles.query';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ButtonSelector from '@/components/article/ButtonSelector';
@@ -12,8 +12,25 @@ import convertToDate from '@/lib/utils/convertToDate';
 const ArticlePage = () => {
   const { state } = useLocation();
   const { slug } = useParams<{ slug: string }>();
-  const [articleInfo, commentsInfo] = useGetArticleQueries(state);
+  const navigate = useNavigate();
+
+  // Redirect to home if no slug is provided
+  if (!slug) {
+    navigate('/');
+    return null;
+  }
+
+  const [articleInfo, commentsInfo] = useGetArticleQueries(slug);
   const { isLogin } = useContext(UserContext);
+
+  // Handle loading and error states
+  if (articleInfo.isLoading) {
+    return <div className="article-page">Loading...</div>;
+  }
+
+  if (articleInfo.isError) {
+    return <div className="article-page">Article not found</div>;
+  }
 
   return (
     <div className="article-page">

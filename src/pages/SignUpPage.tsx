@@ -24,8 +24,7 @@ const SignUpPage = () => {
     event.preventDefault();
     postRegister(signUpdata)
       .then((res) => {
-        token.setToken(ACCESS_TOKEN_KEY, res.data.user.token);
-        setIsLogin(!!token.getToken(ACCESS_TOKEN_KEY));
+        setIsLogin(res.data.user.token); // This now handles setting the token internally
         navigate('/', { replace: true });
       })
       .catch((err) => {

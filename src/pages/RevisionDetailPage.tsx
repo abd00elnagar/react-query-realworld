@@ -159,8 +159,12 @@ const RevisionDetailPage = () => {
     if (!revision) return;
 
     try {
-      await apiClient.post(`/articles/${slug}/revisions/${revision.id}/revert`);
-      navigate('/', { replace: true });
+      const response = await apiClient.post(`/articles/${slug}/revisions/${revision.id}/revert`);
+      if (response.data.article) {
+        const newSlug = response.data.article.slug;
+        // Navigate to the article page with the new slug
+        navigate(`/article/${newSlug}`, { replace: true });
+      }
     } catch (err) {
       console.error('Failed to revert revision:', err);
     }
@@ -200,7 +204,7 @@ const RevisionDetailPage = () => {
 
   return (
     <div className="revision-detail-container">
-      <button onClick={() => navigate(-1)} className="back-button">
+      <button onClick={() => navigate(`/article/${slug}/revisions`)} className="back-button">
         <BackArrow /> Back to revisions
       </button>
       <div className="revision-header">
