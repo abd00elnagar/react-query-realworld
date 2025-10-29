@@ -14,7 +14,7 @@ const SignInPage = () => {
     password: '',
     emailOrPassword: '',
   });
-  const [lastError, setLastError] = useState<unknown>(null);
+  const [lastError, setLastError] = useState<Error | null>(null);
 
   const [signIndata, onChangeSignInData] = useInputs({ email: '', password: '' });
   const { setIsLogin } = useContext(UserContext);
@@ -23,17 +23,35 @@ const SignInPage = () => {
 
   const onLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Reset errors
+    setError({ email: '', password: '', emailOrPassword: '' });
+    setLastError(null);
+
     postLogin(signIndata)
       .then((res) => {
-        setIsLogin(res.data.user.token); // This now handles setting the token internally
+        setIsLogin(res.data.user.token);
         navigate('/', { replace: true });
       })
-      .catch((err) => {
-        setError({
-          email: err.response.data.errors.email,
-          password: err.response.data.errors.password,
-          emailOrPassword: err.response.data.errors['email or password'],
-        });
+      .catch((err: any) => {
+        if (err.response?.status === 403) {
+          setError({
+            email: '',
+            password: '',
+            emailOrPassword: 'Wrong email or password. Please try again.',
+          });
+        } else if (err.response?.data?.errors) {
+          setError({
+            email: err.response.data.errors.email || '',
+            password: err.response.data.errors.password || '',
+            emailOrPassword: err.response.data.errors['email or password'] || '',
+          });
+        } else {
+          setError({
+            email: '',
+            password: '',
+            emailOrPassword: 'An error occurred. Please try again.',
+          });
+        }
         setLastError(err);
       });
   };
@@ -48,13 +66,13 @@ const SignInPage = () => {
               <Link to={routerMeta.SignUpPage.path}>Not registered?</Link>
             </p>
 
-            {lastError ? <ServerErrorAlert error={lastError} /> : null}
-
-            <ul className="error-messages">
-              {error.email && <li>email {error.email}</li>}
-              {error.password && <li>password {error.password}</li>}
-              {error.emailOrPassword && <li>email or password {error.emailOrPassword}</li>}
-            </ul>
+            {(error.email || error.password || error.emailOrPassword) && (
+              <ul className="error-messages">
+                {error.email && <li>Email {error.email}</li>}
+                {error.password && <li>Password {error.password}</li>}
+                {error.emailOrPassword && <li>{error.emailOrPassword}</li>}
+              </ul>
+            )}
 
             <form onSubmit={onLogin}>
               <fieldset className="form-group">
