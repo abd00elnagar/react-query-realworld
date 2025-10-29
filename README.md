@@ -1,48 +1,31 @@
-# React Query RealWorld Example App
+# RealWorld React Frontend
 
-[![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.x-3178C6.svg)](https://www.typescriptlang.org/)
 
-A React implementation of the RealWorld frontend with article revision functionality, using React Query for state management.
+A clean, responsive React frontend for the RealWorld app with article revision history.
 
-## Requirements
-- Node.js >= 16
-- npm or yarn
-- Backend API running (see laravel-realworld-example-app)
+## 🚀 Quick Start
 
-## Installation
-
-1. Clone the repository
+1. **Clone and install**
 ```bash
 git clone https://github.com/abd00elnagar/react-query-realworld.git
 cd react-query-realworld
-```
-
-2. Install dependencies
-```bash
 npm install
 # or
 yarn install
 ```
 
-3. Configure environment
-Create a `.env` file in the root directory:
-```env
-REACT_APP_API_URL=http://localhost:8000/api
-```
+2. **Configure API URL**
+   Open `src/repositories/apiClient.ts` and update the `baseURL`:
+   ```typescript
+   const baseURL = 'http://your-backend-url/api';
+   ```
 
-⚠️ **IMPORTANT API Configuration Note** ⚠️
-- The API base URL is configured in `src/repositories/apiClient.ts`
-- Default configuration uses the environment variable `REACT_APP_API_URL`
-- If you need to change the API endpoint:
-  ```typescript
-  // src/repositories/apiClient.ts
-  const baseURL = 'http://localhost:8000/api';
-  
-  export const apiClient = axios.create({
-    baseURL,
-    // ... other configuration
-  });
-  ```
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 - Make sure to:
   1. Assign the correct URL to the baseURL variable
   3. Verify the API is accessible at the specified URL
